@@ -1,120 +1,22 @@
-<!-- images are from flaticon
-attributions: 
-clouds: freepik
-partial-clouds: iconixar
-rain: berkahicon
-sun: freepik
-
-referenced tutorial by Devression: https://www.youtube.com/watch?v=74IOjtVvExY&ab_channel=Devression on how to make scrolling hourly forecast bar
-used chatgpt to help with the logic for toggling temperature -->
-
 <!DOCTYPE html>
-    <head>
-        <link rel="stylesheet" href="./style.css">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <div id="weather-container">
-            <button id="toggle-temp" class="button" onclick="toggleTemperature()">Switch to °F</button>
-            <img id="weather-icon" alt="Weather Icon">
-            <div id="hourly-forecast-container">
-                <div id="hourly-forecast"></div>
-            </div>
-            <div id="temp-container">
-                <div id="temp-div"></div>
-                <div id="feels-like-div"></div>
-                <div id="weather-info"></div>
-            </div>
-        </div>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>React Weather App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="root"></div>
 
-        <script>
-        let isCelsius = true;
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-        const sampleWeatherData = {
-            city: "Philadelphia",
-            currentTempC: 15,
-            currentTempF: 59,
-            feelsLikeC: 13,
-            feelsLikeF: 55,
-            description: "Partial clouds",
-            iconPath: "./images/partial-clouds.png",
-            hourly: [
-                { hour: "9:00", tempC: 14, tempF: 57, icon: "./images/cloud.png" },
-                { hour: "10:00", tempC: 16, tempF: 61, icon: "./images/sun.png" },
-                { hour: "11:00", tempC: 17, tempF: 63, icon: "./images/partial-clouds.png" },
-                { hour: "12:00", tempC: 14, tempF: 57, icon: "./images/rain.png" },
-                { hour: "1:00", tempC: 14, tempF: 57, icon: "./images/cloud.png" },
-                { hour: "2:00", tempC: 16, tempF: 61, icon: "./images/sun.png" },
-                { hour: "3:00", tempC: 17, tempF: 63, icon: "./images/partial-clouds.png" },
-                { hour: "4:00", tempC: 14, tempF: 57, icon: "./images/cloud.png" }
-            ]
-        };
-
-        window.onload = function() {
-            displayWeather(sampleWeatherData);
-        };
-
-        function displayWeather(data) {
-            const tempDivInfo = document.getElementById('temp-div');
-            const flDiv = document.getElementById('feels-like-div');
-            const weatherInfoDiv = document.getElementById('weather-info');
-            const weatherIcon = document.getElementById('weather-icon');
-            tempDivInfo.dataset.celsius = data.currentTempC;
-            tempDivInfo.dataset.fahrenheit = data.currentTempF;
-            tempDivInfo.innerHTML = `<p>${data.currentTempC}°C</p>`;
-
-            flDiv.dataset.celsius = data.feelsLikeC;
-            flDiv.dataset.fahrenheit = data.feelsLikeF;
-            flDiv.innerHTML = `<p>Feels like: ${data.feelsLikeC}°C</p>`;
-            weatherInfoDiv.innerHTML = `
-                <p>${data.city}</p> 
-                <p>${data.description}</p>
-            `;
-            weatherIcon.src = data.iconPath;
-            weatherIcon.alt = data.description;
-            weatherIcon.style.display = 'block';
-
-            displayForecast(data.hourly);
-        }
-
-        function toggleTemperature() {
-            const tempDivInfo = document.getElementById('temp-div');
-            const flDiv = document.getElementById('feels-like-div');
-            const toggle = document.getElementById('toggle-temp');
-
-            if (isCelsius) {
-                tempDivInfo.innerHTML = `<p>${tempDivInfo.dataset.fahrenheit}°F</p>`;
-                flDiv.innerHTML = `<p>Feels like: ${flDiv.dataset.fahrenheit}°F</p>`;
-                toggle.innerText = "Switch to °C";
-            } else {
-                tempDivInfo.innerHTML = `<p>${tempDivInfo.dataset.celsius}°C</p>`;
-                flDiv.innerHTML = `<p>Feels like: ${flDiv.dataset.celsius}°C</p>`;
-                toggle.innerText = "Switch to °F";
-            }
-            const items = document.querySelectorAll('.hourly-item');
-            items.forEach(item => {
-                const celsius = item.dataset.celsius;
-                const fahrenheit = item.dataset.fahrenheit;
-                item.querySelector('span:last-child').innerText = isCelsius ? `${fahrenheit}°F` : `${celsius}°C`;
-            });
-            isCelsius = !isCelsius;
-        }
-
-        function displayForecast(hourlyData) {
-            const hourlyForecastDiv = document.getElementById('hourly-forecast');
-            hourlyForecastDiv.innerHTML = '';
-
-            hourlyData.forEach(item => {
-                const hourlyItemHtml = `
-                    <div class="hourly-item" data-celsius="${item.tempC}" data-fahrenheit="${item.tempF}">
-                        <span>${item.hour}</span> 
-                        <img src="${item.icon}" alt="Hourly Weather Icon"> 
-                        <span>${item.tempC}°C</span>
-                    </div>
-                `;
-                hourlyForecastDiv.innerHTML += hourlyItemHtml;
-            });
-        }
-        </script>
-    </body>
+    <script type="text/babel" src="app.js"></script>
+  </body>
 </html>
